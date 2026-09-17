@@ -23,14 +23,15 @@ jobs:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
           
       - name: Log in to DockerHub
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+        run: |
+         echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login \
+           -u "${{ secrets.DOCKERHUB_USERNAME }}" \
+           --password-stdin
 
       - name: Build and push
         run: |
-           docker build -t ${{ secrets.DOCKER_USERNAME }}/tic-tac-toe:latest .
-           docker push ${{ secrets.DOCKER_USERNAME }}/tic-tac-toe:latest
-        env:
-          DOCKER_CLI_ACI: 1
+         docker build -t "${{ secrets.DOCKERHUB_USERNAME }}/tic-tac-toe:latest" .
+         docker push "${{ secrets.DOCKERHUB_USERNAME }}/tic-tac-toe:latest"
         
       - name: Trivy file scan
         run: trivy fs . > trivyfs.txt
