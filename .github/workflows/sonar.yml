@@ -27,8 +27,8 @@ jobs:
 
       - name: Build and push
         run: |
-           docker build -t ${{ secrets.DOCKER_USERNAME }}/tic-tac-toe:latest .
-           docker push ${{ secrets.DOCKER_USERNAME }}/tic-tac-toe:latest
+           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/tic-tac-toe:latest .
+           docker push ${{ secrets.DOCKERHUB_USERNAME }}/tic-tac-toe:latest
         env:
           DOCKER_CLI_ACI: 1
         
