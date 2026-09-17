@@ -35,3 +35,6 @@ jobs:
         
       - name: Trivy file scan
         run: trivy fs . > trivyfs.txt
+        
+      - name: Image scan
+        run: trivy image ayolannister/tic-tac-toe:latest > trivyimage.txt
