@@ -48,3 +48,29 @@ jobs:
   
       - name: Deploy to container
         run: docker run -d --name game -p 3000:3000 ayolannister/tic-tac-toe:latest
+
+      - name: Update kubeconfig
+        run: |
+          az aks get-credentials \
+            --resource-group aks-cloud-rg \
+            --name AKS-CLOUD \
+            --overwrite-existing
+
+      - name: Verify AKS connection
+        run: kubectl get nodes
+
+      - name: Deploy to Kubernetes
+        run: kubectl apply -f deployment-service.yml
+
+      - name: Verify deployment
+        run: kubectl get pods
+
+      - name: Send a Slack Notification
+        if: always()
+        uses: act10ns/slack@v2
+        with:
+          status: ${{ job.status }}
+          steps: ${{ toJson(steps) }}
+          channel: '#all-tic-tac-toe'
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
